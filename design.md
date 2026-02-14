@@ -987,51 +987,80 @@ Get user's XP, level, and completed challenges
   - GitHub Actions for CI/CD
 
 #### CI/CD Pipeline
-- **GitHub Actions** (primary)
-  - Automated testing
-  - Build and deploy
-  - Environment secrets
-- **Vercel** (frontend deployment)
-  - Automatic preview deployments
-  - Edge network
-  - Analytics
-- **Railway** (backend deployment)
-  - One-click deploy
-  - Auto-scaling
-  - Database hosting
-- **Render** (alternative backend)
-  - Free tier available
-  - Auto-deploy from Git
+- **GitHub Actions** (code testing and building)
+  - Automated testing on pull requests
+  - Build Docker images
+  - Run linting and type checking
+  - Security scanning
+- **AWS CodePipeline** (RECOMMENDED for deployment)
+  - Automated deployment to AWS
+  - Integration with ECS, Elastic Beanstalk, Lambda
+  - Blue/green deployments
+  - Rollback capabilities
+- **AWS CodeBuild** (build service)
+  - Compile and test code
+  - Build Docker images
+  - Push to ECR (Elastic Container Registry)
+- **AWS CodeDeploy** (deployment automation)
+  - Zero-downtime deployments
+  - Automatic rollback on failure
+  - Deployment strategies (rolling, blue/green, canary)
+- **Terraform** or **AWS CDK** (infrastructure as code)
+  - Version-controlled infrastructure
+  - Reproducible environments
+  - Multi-environment management
 
 #### Containerization
 - **Docker 24+**
   - Development containers
   - Production images
+  - Multi-stage builds for optimization
 - **Docker Compose**
   - Local development stack
   - Service orchestration
+- **AWS ECR (Elastic Container Registry)**
+  - Private Docker registry
+  - Image scanning for vulnerabilities
+  - Lifecycle policies
+  - Integration with ECS/EKS
 
 #### Container Orchestration (Production Scale)
-- **Kubernetes 1.28+** (for scale)
-  - Auto-scaling
-  - Load balancing
-  - Self-healing
-- **AWS ECS/Fargate** (managed alternative)
-  - Serverless containers
-  - AWS integration
+- **AWS ECS (Elastic Container Service)** (RECOMMENDED)
+  - Fully managed container orchestration
+  - Fargate for serverless containers
+  - Auto-scaling based on metrics
+  - Load balancing integration
+  - Service discovery
+  - Simpler than Kubernetes
+- **AWS EKS (Elastic Kubernetes Service)** (for complex needs)
+  - Managed Kubernetes
+  - Multi-cloud portability
+  - Advanced orchestration features
+  - Larger ecosystem
+  - Higher complexity and cost
 
 #### Infrastructure as Code
-- **Terraform 1.6+**
+- **AWS CDK (Cloud Development Kit)** (RECOMMENDED)
+  - Define infrastructure using TypeScript/Python
+  - Type-safe infrastructure code
+  - Synthesizes to CloudFormation
+  - Reusable constructs
+  - Best AWS integration
+- **Terraform 1.6+** (alternative - multi-cloud)
   - Multi-cloud support
+  - Large ecosystem
   - State management
-- **Pulumi** (alternative)
-  - TypeScript/Python IaC
-  - Better developer experience
+  - More verbose than CDK
+- **AWS CloudFormation** (native)
+  - YAML/JSON templates
+  - Native AWS support
+  - Change sets for preview
+  - More verbose than CDK
 
 #### Cloud Providers
 
-**Primary: AWS**
-- **EC2** (compute)
+**Primary: AWS (RECOMMENDED)**
+- **EC2** or **ECS/Fargate** (compute)
 - **RDS PostgreSQL** (managed database)
 - **ElastiCache Redis** (managed cache)
 - **S3** (file storage)
@@ -1040,6 +1069,21 @@ Get user's XP, level, and completed challenges
 - **API Gateway** (API management)
 - **CloudWatch** (monitoring)
 - **Secrets Manager** (secrets)
+- **VPC** (network isolation)
+- **IAM** (access management)
+
+**Why AWS:**
+- Industry standard for production applications
+- Comprehensive service ecosystem
+- Best security and compliance (SOC 2, HIPAA, GDPR)
+- Superior scaling capabilities
+- 99.99% uptime SLA
+- Global infrastructure (25+ regions)
+- Enterprise support available
+
+**Total Cost: ~$500-2,000/month for production**
+
+---
 
 **Alternative: Google Cloud Platform**
 - **Cloud Run** (containers)
@@ -1048,71 +1092,122 @@ Get user's XP, level, and completed challenges
 - **Cloud Storage** (files)
 - **Cloud CDN**
 
-**Alternative: Vercel + Railway**
+**Total Cost: ~$400-1,500/month**
+
+---
+
+**Alternative: Vercel + Railway (for smaller projects)**
 - **Vercel** (frontend + edge functions)
 - **Railway** (backend + database)
 - **Upstash** (Redis)
-- **Cloudflare R2** (S3-compatible storage)
+- **Cloudflare R2** (storage)
+
+**Total Cost: ~$50-300/month**
+**Note:** Limited scalability, not recommended for production at scale
 
 #### Monitoring & Observability
+- **AWS CloudWatch** (RECOMMENDED - native monitoring)
+  - Metrics for all AWS services
+  - Custom metrics and dashboards
+  - Alarms and notifications
+  - Log aggregation and insights
+  - Application Insights for automatic dashboards
+  - ServiceLens for distributed tracing
+- **AWS X-Ray** (distributed tracing)
+  - Request tracing across services
+  - Performance bottleneck identification
+  - Service map visualization
+  - Integration with Lambda, ECS, API Gateway
 - **Sentry 7.80+** (error tracking)
   - Error monitoring
   - Performance monitoring
   - Release tracking
+  - Works alongside CloudWatch
+- **Datadog** (enhanced APM - optional)
+  - Advanced application performance monitoring
+  - Infrastructure monitoring
+  - Log aggregation
+  - Better UI than CloudWatch
+  - Higher cost
 - **LogRocket** (session replay)
   - User session recording
   - Console logs
   - Network requests
-- **Datadog** (APM)
-  - Application performance
-  - Infrastructure monitoring
-  - Log aggregation
-- **Grafana + Prometheus** (self-hosted alternative)
-  - Custom dashboards
-  - Alerting
-- **Vercel Analytics** (frontend metrics)
-  - Web vitals
-  - User analytics
+  - Frontend-focused
 
 #### Logging
-- **Winston 3.11+** (Node.js)
+- **AWS CloudWatch Logs** (RECOMMENDED)
+  - Centralized logging for all AWS services
+  - Log insights for SQL-like queries
+  - Real-time log streaming
+  - Automatic retention policies
+  - Integration with Lambda, ECS, RDS
+- **Winston 3.11+** (Node.js application logging)
   - Structured logging
-  - Multiple transports
+  - Multiple transports (CloudWatch, file, console)
+  - Log levels and filtering
 - **Pino 8.16+** (faster alternative)
   - JSON logging
   - Low overhead
-- **CloudWatch Logs** (AWS)
-  - Centralized logging
-  - Log insights
+  - CloudWatch transport available
+- **Better Stack (Logtail)** (enhanced log management)
+  - SQL-based log search
+  - Works with CloudWatch
+  - Better UI than native CloudWatch
 
 #### Security & Secrets Management
-- **AWS Secrets Manager**
-  - API key rotation
-  - Encrypted storage
-- **HashiCorp Vault** (self-hosted)
+- **AWS Secrets Manager** (RECOMMENDED)
+  - Automatic secret rotation
+  - Encrypted storage with KMS
+  - Fine-grained IAM access control
+  - Audit logging with CloudTrail
+  - Integration with RDS, Lambda, ECS
+- **AWS Systems Manager Parameter Store** (alternative)
+  - Free tier available
+  - Hierarchical storage
+  - Integration with AWS services
+- **HashiCorp Vault** (self-hosted - advanced)
   - Dynamic secrets
   - Encryption as a service
-- **Doppler** (managed alternative)
-  - Secret syncing
+  - Multi-cloud support
+- **Doppler** (third-party managed)
+  - Secret syncing across environments
   - Team collaboration
+  - Works alongside AWS
 
 #### CDN & Edge
-- **Cloudflare** (primary)
-  - DDoS protection
-  - WAF
-  - Edge caching
-  - Workers (edge compute)
-- **AWS CloudFront** (alternative)
-  - Global edge network
-  - Lambda@Edge
+- **AWS CloudFront** (RECOMMENDED)
+  - Global edge network (450+ locations)
+  - DDoS protection with AWS Shield
+  - SSL/TLS certificates (free with ACM)
+  - Lambda@Edge for edge computing
+  - Origin failover for high availability
+  - Real-time metrics and logging
+  - Cache invalidation
+  - Geo-restriction capabilities
+- **Cloudflare** (additional layer - optional)
+  - Additional DDoS protection
+  - WAF (Web Application Firewall)
+  - Bot management
+  - Can sit in front of CloudFront for extra security
 
 #### Database Backups
-- **AWS RDS Automated Backups**
-  - Point-in-time recovery
-  - Cross-region replication
-- **pg_dump** (manual backups)
+- **AWS RDS Automated Backups** (RECOMMENDED)
+  - Automatic daily backups
+  - Point-in-time recovery (up to 35 days)
+  - Cross-region replication for disaster recovery
+  - Automated backup retention policies
+  - Zero downtime for backups
+  - Backup to S3 automatically
+- **AWS Backup** (centralized backup management)
+  - Backup policies across AWS services
+  - Compliance reporting
+  - Cross-account and cross-region backups
+- **pg_dump** (manual backups - additional safety)
   - Full database dumps
-  - Scheduled via cron
+  - Scheduled via AWS Lambda or cron
+  - Backup to S3 for long-term storage
+  - Can be used for migration or testing
 
 ---
 
@@ -1228,20 +1323,31 @@ Get user's XP, level, and completed challenges
 - Monaco Editor
 
 **Backend:**
-- Next.js API Routes (BFF)
-- Prisma + PostgreSQL (Supabase)
-- Redis (Upstash)
+- Node.js + Express + TypeScript
+- Prisma + PostgreSQL
+- Redis
 - Judge0 API
 
 **AI:**
 - OpenAI GPT-4 + GPT-3.5
 - Vercel AI SDK
 
-**Hosting:**
-- Vercel (all-in-one)
-- Supabase (database + auth)
+**AWS Infrastructure (RECOMMENDED):**
+- **AWS Amplify** or **S3 + CloudFront** (frontend hosting)
+- **AWS Elastic Beanstalk** or **ECS Fargate** (backend)
+- **AWS RDS PostgreSQL** (t3.micro instance)
+- **AWS ElastiCache Redis** (t3.micro instance)
+- **AWS Lambda** (for serverless functions)
+- **AWS CloudWatch** (monitoring)
+- **AWS Secrets Manager** (API keys)
 
-**Cost:** ~$200/month
+**Cost:** ~$200-400/month
+
+**Why AWS for MVP:**
+- Easy to scale as you grow
+- Free tier available (12 months)
+- Production-ready from day one
+- No migration needed later
 
 ---
 
@@ -1254,8 +1360,8 @@ Get user's XP, level, and completed challenges
 
 **Backend:**
 - Node.js + Express + TypeScript
-- Prisma + PostgreSQL (AWS RDS)
-- Redis (AWS ElastiCache)
+- Prisma + PostgreSQL
+- Redis
 - BullMQ (job queue)
 - Socket.io (WebSocket)
 
@@ -1264,13 +1370,25 @@ Get user's XP, level, and completed challenges
 - Anthropic Claude (fallback)
 - LangChain (orchestration)
 
-**Hosting:**
-- Vercel (frontend)
-- Railway/Render (backend)
-- AWS RDS (database)
-- Cloudflare (CDN)
+**AWS Infrastructure (RECOMMENDED):**
+- **AWS CloudFront + S3** (frontend CDN)
+- **AWS ECS Fargate** (containerized backend)
+- **AWS RDS PostgreSQL** (t3.medium, Multi-AZ)
+- **AWS ElastiCache Redis** (t3.small cluster)
+- **AWS Application Load Balancer** (traffic distribution)
+- **AWS Lambda** (background jobs)
+- **AWS CloudWatch** (monitoring & alerts)
+- **AWS Secrets Manager** (secrets)
+- **AWS VPC** (network security)
 
-**Cost:** ~$1,500/month
+**Cost:** ~$800-1,500/month
+
+**Why AWS for Growth:**
+- Auto-scaling capabilities
+- High availability (Multi-AZ)
+- Advanced monitoring and alerting
+- Enterprise-grade security
+- 99.99% uptime SLA
 
 ---
 
@@ -1283,8 +1401,8 @@ Get user's XP, level, and completed challenges
 
 **Backend:**
 - Node.js + Fastify + TypeScript
-- Prisma + PostgreSQL (AWS RDS Multi-AZ)
-- Redis Cluster (AWS ElastiCache)
+- Prisma + PostgreSQL
+- Redis Cluster
 - BullMQ (job queue)
 - Socket.io with Redis adapter
 
@@ -1295,19 +1413,38 @@ Get user's XP, level, and completed challenges
 - LangChain (orchestration)
 - Pinecone (vector DB)
 
-**Infrastructure:**
-- AWS ECS/Fargate (containers)
-- AWS RDS (database)
-- AWS ElastiCache (Redis)
-- AWS S3 + CloudFront (CDN)
-- Kubernetes (if needed)
-
-**Monitoring:**
-- Datadog (full stack)
-- Sentry (errors)
-- LogRocket (sessions)
+**AWS Infrastructure (RECOMMENDED):**
+- **AWS CloudFront** (global CDN with edge caching)
+- **AWS ECS Fargate** or **EKS** (container orchestration)
+- **AWS RDS PostgreSQL** (r5.xlarge, Multi-AZ with read replicas)
+- **AWS ElastiCache Redis** (r5.large cluster mode)
+- **AWS Application Load Balancer** (with auto-scaling)
+- **AWS Lambda** (serverless background jobs)
+- **AWS S3** (file storage with lifecycle policies)
+- **AWS CloudWatch** (comprehensive monitoring)
+- **AWS X-Ray** (distributed tracing)
+- **AWS WAF** (web application firewall)
+- **AWS Shield** (DDoS protection)
+- **AWS Secrets Manager** (secrets rotation)
+- **AWS VPC** (isolated network with private subnets)
+- **AWS Route 53** (DNS management)
 
 **Cost:** ~$5,000-10,000/month
+
+**Why AWS for Scale:**
+- Proven at enterprise scale
+- Auto-scaling across multiple regions
+- Advanced security and compliance
+- 99.99% uptime SLA with Multi-AZ
+- 24/7 enterprise support
+- Cost optimization tools (Reserved Instances, Savings Plans)
+- Comprehensive monitoring and observability
+
+**Monitoring:**
+- AWS CloudWatch (native)
+- Datadog (enhanced APM)
+- Sentry (error tracking)
+- LogRocket (session replay)
 
 ---
 
